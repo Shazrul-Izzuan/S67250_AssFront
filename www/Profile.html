@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap" rel="stylesheet">
+    <title>Profile</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <div class="logo">
+                    <a href="home.html">
+                        <img src="img/playstore-icon.png" alt="Logo" />
+                    </a>
+                </div>
+                <div class="navigation">
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="home.html">
+                                <span class="fa fa-home"></span>
+                                <span>Home</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="search.html">
+                                <span class="fa fa-search"></span>
+                                <span>Search</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="profile.html">
+                                <span class="fa fa-user"></span>
+                                <span>Profile</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="navigation mt-4">
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="AddSongs.html">
+                                <span class="fa fa-plus-square"></span>
+                                <span>Add Songs</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-10 main-container">
+                <div class="topbar d-flex justify-content-between align-items-center py-2">
+                    <div class="prev-next-button">
+                        <button type="button" class="btn btn-dark btn-circle"><a href="javascript:history.back()"><span class="fa fa-chevron-left"></span></a></button>
+                        <button type="button" class="btn btn-dark btn-circle"><a href="javascript:history.forward()"><span class="fa fa-chevron-right"></span></a></button>
+                    </div>
+                </div>
+                <div class="profile">
+                    <div class="profile-info">
+                        <img src="img/playstore-icon.png" alt="Profile Picture">
+                        <h4>Music Player</h4>
+                        <p>Place to listen songs</p>
+                    </div>
+                    <div class="user-playlists">
+                        <h3>Recently Played Songs</h3>
+                        <div class="list d-flex flex-wrap">
+                            <!-- Dynamic content will be injected here -->
+                        </div>
+                    </div>
+                </div>
+                <audio id="audioPlayer" controls class="d-none">
+                    <!-- Source will be dynamically injected -->
+                </audio>
+            </div>
+        </div>
+    </div>
+    <div class="preview fixed-bottom d-flex align-items-center justify-content-between bg-dark p-3">
+        <div class="text">
+            <h6>Music Player</h6>
+            <p>Place to listen to song</p>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/23cecef777.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="js/Songs.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>

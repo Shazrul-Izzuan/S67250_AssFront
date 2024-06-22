@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>Create Playlist</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <div class="logo">
+                    <a href="home.html">
+                        <img src="img/playstore-icon.png" alt="Logo" />
+                    </a>
+                </div>
+                <div class="navigation">
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="home.html">
+                                <span class="fa fa-home"></span>
+                                <span>Home</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="search.html">
+                                <span class="fa fa-search"></span>
+                                <span>Search</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="profile.html">
+                                <span class="fa fa-user"></span>
+                                <span>Profile</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="navigation mt-4">
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="AddSongs.html">
+                                <span class="fa fa-plus-square"></span>
+                                <span>Add Songs</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-10 main-container">
+                <div class="topbar d-flex justify-content-between align-items-center py-2">
+                    <div class="prev-next-button">
+                        <button type="button" class="btn btn-dark btn-circle"><span class="fa fa-chevron-left"></span></button>
+                        <button type="button" class="btn btn-dark btn-circle"><span class="fa fa-chevron-right"></span></button>
+                    </div>
+                </div>
+                <div class="create-playlist-form p-3">
+                    <h2>Add Songs</h2>
+                    <form id="playlistForm">
+                        <div class="form-group">
+                            <label for="playlistName">Title</label>
+                            <input type="text" class="form-control" id="playlistName" placeholder="Enter song name">
+                        </div>
+                        <div class="form-group">
+                            <label for="playlistDescription">Description</label>
+                            <textarea class="form-control" id="playlistDescription" rows="3" placeholder="Enter description"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </form>
+                    <div id="playlistResult" class="mt-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyApj9RnhrXdLTCRMAXgeV1iueppQkKs-Wo",
+            authDomain: "assfront-2d9a2.firebaseapp.com",
+            databaseURL: "https://assfront-2d9a2-default-rtdb.firebaseio.com",
+            projectId: "assfront-2d9a2",
+            storageBucket: "assfront-2d9a2.appspot.com",
+            messagingSenderId: "910148150441",
+            appId: "1:910148150441:web:2307a4979433a62954f5b8",
+            measurementId: "G-DTSJWCG91Z"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // Add song to Firestore
+        document.getElementById('playlistForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('playlistName').value;
+            const description = document.getElementById('playlistDescription').value;
+            const songFile = document.getElementById('songFile').files[0];
+
+            if (songFile) {
+                const storageRef = ref(storage, 'songs/' + songFile.name);
+                try {
+                    await uploadBytes(storageRef, songFile);
+                    const downloadURL = await getDownloadURL(storageRef);
+
+                    await setDoc(doc(db, "playlists", title), {
+                        title: title,
+                        description: description,
+                        songURL: downloadURL
+                    });
+
+                    document.getElementById('playlistResult').innerHTML = `<div class="alert alert-success">Song added successfully</div>`;
+                } catch (error) {
+                    document.getElementById('playlistResult').innerHTML = `<div class="alert alert-danger">Error adding song: ${error}</div>`;
+                }
+            } else {
+                document.getElementById('playlistResult').innerHTML = `<div class="alert alert-warning">Please select a song file to upload</div>`;
+            }
+        });
+    </script>
+    <script src="https://kit.fontawesome.com/23cecef777.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="js/Songs.js"></script>
+    <script src="js/search.js"></script>
+</body>
+</html>
