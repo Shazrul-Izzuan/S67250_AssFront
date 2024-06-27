@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible"="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>Create Playlist</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <div class="logo">
+                    <a href="Home.html">
+                        <img src="img/playstore-icon.png" alt="Logo" />
+                    </a>
+                </div>
+                <div class="navigation">
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="Home.html">
+                                <span class="fa fa-home"></span>
+                                <span>Home</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="Search.html">
+                                <span class="fa fa-search"></span>
+                                <span>Search</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="Profile.html">
+                                <span class="fa fa-user"></span>
+                                <span>Profile</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="navigation mt-4">
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="AddSongs.html">
+                                <span class="fa fa-plus-square"></span>
+                                <span>Add Songs</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-10 main-container">
+                <div class="topbar d-flex justify-content-between align-items-center py-2">
+                    <div class="prev-next-button">
+                        <button type="button" class="btn btn-dark btn-circle"><span class="fa fa-chevron-left"></span></button>
+                        <button type="button" class="btn btn-dark btn-circle"><span class="fa fa-chevron-right"></span></button>
+                    </div>
+                </div>
+                <div class="create-playlist-form p-3">
+                    <h2>Add Songs</h2>
+                    <form id="insertForm">
+                        <div class="form-group">
+                            <label for="inputTitle">Title</label>
+                            <input type="text" class="form-control" id="inputTitle" placeholder="Enter song title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputSinger">Singer</label>
+                            <input type="text" class="form-control" id="inputSinger" placeholder="Enter singer name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputDate">Date</label>
+                            <input type="date" class="form-control" id="inputDate" placeholder="Enter song release date" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Insert Data</button>
+                    </form>
+                    <div id="insertResult" class="mt-4"></div>
+                    <form id="deleteForm" class="mt-5">
+                        <div class="form-group">
+                            <label for="deleteTitle">Delete Title</label>
+                            <input type="text" class="form-control" id="deleteTitle" placeholder="Enter title to delete" required>
+                        </div>
+                        <button type="submit" class="btn btn-danger">Delete Data</button>
+                    </form>
+                    <div id="deleteResult" class="mt-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, set, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyApj9RnhrXdLTCRMAXgeV1iueppQkKs-Wo",
+            authDomain: "assfront-2d9a2.firebaseapp.com",
+            databaseURL: "https://assfront-2d9a2-default-rtdb.firebaseio.com",
+            projectId: "assfront-2d9a2",
+            storageBucket: "assfront-2d9a2.appspot.com",
+            messagingSenderId: "910148150441",
+            appId: "1:910148150441:web:2307a4979433a62954f5b8",
+            measurementId: "G-DTSJWCG91Z"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Insert Data
+        const insertForm = document.getElementById('insertForm');
+        insertForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const title = document.getElementById('inputTitle').value;
+            const singer = document.getElementById('inputSinger').value;
+            const date = document.getElementById('inputDate').value;
+
+            set(ref(db, 'songs/' + title), {
+                title: title,
+                singer: singer,
+                date: date
+            })
+            .then(() => {
+                document.getElementById('insertResult').innerHTML = `<div class="alert alert-success">Data added successfully!</div>`;
+                insertForm.reset();
+            })
+            .catch((error) => {
+                document.getElementById('insertResult').innerHTML = `<div class="alert alert-danger">Error: ${error}</div>`;
+            });
+        });
+
+        // Delete Data
+        const deleteForm = document.getElementById('deleteForm');
+        deleteForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const title = document.getElementById('deleteTitle').value;
+
+            remove(ref(db, 'songs/' + title))
+            .then(() => {
+                document.getElementById('deleteResult').innerHTML = `<div class="alert alert-success">Data deleted successfully!</div>`;
+                deleteForm.reset();
+            })
+            .catch((error) => {
+                document.getElementById('deleteResult').innerHTML = `<div class="alert alert-danger">Error: ${error}</div>`;
+            });
+        });
+    </script>
+    <script src="https://kit.fontawesome.com/23cecef777.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="js/Songs.js"></script>
+    <script src="js/search.js"></script>
+</body>
+</html>
